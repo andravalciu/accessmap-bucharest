@@ -1,10 +1,19 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import MapPage from "./pages/MapPage";
+import About from "./pages/About";
+import Contribute from "./pages/Contribute";
+
 function App() {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50">
-      <h1 className="text-4xl font-bold text-emerald-700">
-        AccessMap Bucharest
-      </h1>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/map" element={<MapPage />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contribute" element={<Contribute />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
