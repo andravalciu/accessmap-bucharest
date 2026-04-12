@@ -1,7 +1,9 @@
 function App() {
   return (
-    <div>
-      <h1>AccessMap Bucharest</h1>
+    <div className="min-h-screen flex items-center justify-center bg-slate-50">
+      <h1 className="text-4xl font-bold text-emerald-700">
+        AccessMap Bucharest
+      </h1>
     </div>
   );
 }
