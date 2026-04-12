@@ -5,7 +5,7 @@ function Navbar() {
     <nav className="w-full px-8 py-4 bg-white shadow-sm border-b border-slate-200">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         <Link to="/" className="text-2xl font-bold text-emerald-700">
-          AccessMap
+          AccessMap Bucharest
         </Link>
 
         <div className="flex gap-6 text-slate-700 font-medium">
