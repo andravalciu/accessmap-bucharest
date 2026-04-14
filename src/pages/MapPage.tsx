@@ -32,80 +32,72 @@ function MapPage() {
   }, []);
 
   return (
-    <main className="min-h-[calc(100vh-73px)] bg-slate-50 px-6 py-8 md:px-10">
-      <div className="mx-auto max-w-7xl">
-        <div className="mb-6">
-          <h1 className="text-3xl font-semibold tracking-tight text-slate-900">
+    <main className="h-[calc(100vh-73px)] bg-slate-50">
+      <div className="grid h-full grid-cols-12">
+        {/* Sidebar */}
+        <aside className="col-span-4 border-r border-slate-200 bg-white p-6 overflow-y-auto">
+          <h1 className="text-2xl font-semibold text-slate-900">
             Accessibility Map
           </h1>
+
           <p className="mt-2 text-slate-600">
-            Explore accessibility-focused locations across Bucharest.
+            Browse accessible places in Bucharest.
           </p>
-        </div>
 
-        {loading && (
-          <div className="mb-4 rounded-2xl border border-slate-200 bg-white p-4 text-slate-600">
-            Loading locations...
+          <div className="mt-8 space-y-4">
+            {locations.map((location) => (
+              <div
+                key={location.id}
+                className="rounded-2xl border border-slate-200 p-4 shadow-sm hover:border-emerald-300 transition"
+              >
+                <h2 className="font-semibold text-lg">{location.name}</h2>
+
+                <p className="text-sm text-slate-500 mt-1">
+                  {location.address}
+                </p>
+
+                <p className="mt-3 text-sm">
+                  Accessibility:{" "}
+                  <span className="font-medium capitalize">
+                    {location.access_level}
+                  </span>
+                </p>
+              </div>
+            ))}
           </div>
-        )}
+        </aside>
 
-        {error && (
-          <div className="mb-4 rounded-2xl border border-red-200 bg-red-50 p-4 text-red-700">
-            Failed to load locations: {error}
-          </div>
-        )}
+        {/* Map */}
+        <section className="col-span-8 h-full">
+          <MapContainer
+            center={bucharestPosition}
+            zoom={12}
+            scrollWheelZoom={true}
+            className="h-full w-full"
+          >
+            <TileLayer
+              attribution="&copy; OpenStreetMap contributors"
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            />
 
-        <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
-          <div className="h-[70vh] w-full">
-            <MapContainer
-              center={bucharestPosition}
-              zoom={12}
-              scrollWheelZoom={true}
-              className="h-full w-full"
-            >
-              <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
+            {locations.map((location) => (
+              <Marker
+                key={location.id}
+                position={[location.latitude, location.longitude]}
+              >
+                <Popup>
+                  <div className="space-y-2">
+                    <h2 className="text-lg font-semibold">{location.name}</h2>
 
-              {locations.map((location) => (
-                <Marker
-                  key={location.id}
-                  position={[location.latitude, location.longitude]}
-                >
-                  <Popup>
-                    <div className="space-y-2">
-                      <h2 className="text-lg font-semibold">{location.name}</h2>
-                      <p className="text-sm text-slate-600">
-                        {location.address}
-                      </p>
-                      <p>Category: {location.category}</p>
-                      <p>Ramp: {location.ramp ? "Yes" : "No"}</p>
-                      <p>Stairs: {location.stairs ? "Yes" : "No"}</p>
-                      <p>Elevator: {location.elevator ? "Yes" : "No"}</p>
-                      <p>
-                        Accessible toilet:{" "}
-                        {location.accessible_toilet ? "Yes" : "No"}
-                      </p>
-                      <p>
-                        Accessible parking:{" "}
-                        {location.accessible_parking ? "Yes" : "No"}
-                      </p>
-                      <p className="font-medium">
-                        Accessibility: {location.access_level}
-                      </p>
-                      {location.notes && (
-                        <p className="text-sm text-slate-600">
-                          {location.notes}
-                        </p>
-                      )}
-                    </div>
-                  </Popup>
-                </Marker>
-              ))}
-            </MapContainer>
-          </div>
-        </div>
+                    <p>{location.address}</p>
+
+                    <p>Accessibility: {location.access_level}</p>
+                  </div>
+                </Popup>
+              </Marker>
+            ))}
+          </MapContainer>
+        </section>
       </div>
     </main>
   );
