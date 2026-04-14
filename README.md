@@ -32,6 +32,7 @@ src/
 ├── data/
 └── types/
 
+```
 ## Future Improvements
 
 Search and filtering system
