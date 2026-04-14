@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "../utils/fixLeafletIcons";
+import MapController from "../components/MapController";
 
 import { supabase } from "../lib/supabase";
 import type { Location } from "../types/location";
@@ -11,6 +12,9 @@ function MapPage() {
   const [locations, setLocations] = useState<Location[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedPosition, setSelectedPosition] = useState<
+    [number, number] | null
+  >(null);
 
   useEffect(() => {
     const fetchLocations = async () => {
@@ -48,11 +52,14 @@ function MapPage() {
             {locations.map((location) => (
               <div
                 key={location.id}
-                className="rounded-2xl border border-slate-200 p-4 shadow-sm hover:border-emerald-300 transition"
+                onClick={() =>
+                  setSelectedPosition([location.latitude, location.longitude])
+                }
+                className="cursor-pointer rounded-2xl border border-slate-200 p-4 shadow-sm transition hover:border-emerald-300"
               >
-                <h2 className="font-semibold text-lg">{location.name}</h2>
+                <h2 className="text-lg font-semibold">{location.name}</h2>
 
-                <p className="text-sm text-slate-500 mt-1">
+                <p className="mt-1 text-sm text-slate-500">
                   {location.address}
                 </p>
 
@@ -79,6 +86,8 @@ function MapPage() {
               attribution="&copy; OpenStreetMap contributors"
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
+
+            <MapController selectedPosition={selectedPosition} />
 
             {locations.map((location) => (
               <Marker
